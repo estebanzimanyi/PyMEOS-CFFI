@@ -1003,9 +1003,10 @@ def set_from_hexwkb(hexwkb: str) -> Annotated[_ffi.CData, "Set *"]:
     return result if result != _ffi.NULL else None
 
 
-def set_from_wkb(wkb: bytes) -> "Set *":
+def set_from_wkb(wkb: bytes) -> Annotated[_ffi.CData, "Set *"]:
     wkb_converted = _ffi.new("uint8_t []", wkb)
     result = _lib.set_from_wkb(wkb_converted, len(wkb))
+    _check_error()
     return result if result != _ffi.NULL else None
 
 
@@ -1040,9 +1041,10 @@ def span_from_hexwkb(hexwkb: str) -> Annotated[_ffi.CData, "Span *"]:
     return result if result != _ffi.NULL else None
 
 
-def span_from_wkb(wkb: bytes) -> "Span *":
+def span_from_wkb(wkb: bytes) -> Annotated[_ffi.CData, "Span *"]:
     wkb_converted = _ffi.new("uint8_t []", wkb)
     result = _lib.span_from_wkb(wkb_converted, len(wkb))
+    _check_error()
     return result if result != _ffi.NULL else None
 
 
@@ -1077,9 +1079,10 @@ def spanset_from_hexwkb(hexwkb: str) -> Annotated[_ffi.CData, "SpanSet *"]:
     return result if result != _ffi.NULL else None
 
 
-def spanset_from_wkb(wkb: bytes) -> "SpanSet *":
+def spanset_from_wkb(wkb: bytes) -> Annotated[_ffi.CData, "SpanSet *"]:
     wkb_converted = _ffi.new("uint8_t []", wkb)
     result = _lib.spanset_from_wkb(wkb_converted, len(wkb))
+    _check_error()
     return result if result != _ffi.NULL else None
 
 
@@ -1143,8 +1146,8 @@ def tstzspanset_out(ss: Annotated[_ffi.CData, "const SpanSet *"]) -> Annotated[s
     return result if result != _ffi.NULL else None
 
 
-def bigintset_make(values: "list[const int64_t]") -> Annotated[_ffi.CData, "Set *"]:
-    values_converted = _ffi.new("const int64_t []", values)
+def bigintset_make(values: list[Annotated[int, "int64_t"]]) -> Annotated[_ffi.CData, "Set *"]:
+    values_converted = values
     result = _lib.bigintset_make(values_converted, len(values))
     _check_error()
     return result if result != _ffi.NULL else None
@@ -1160,8 +1163,8 @@ def bigintspan_make(
     return result if result != _ffi.NULL else None
 
 
-def dateset_make(values: "list[const DateADT]") -> Annotated[_ffi.CData, "Set *"]:
-    values_converted = _ffi.new("const DateADT []", values)
+def dateset_make(values: list[int]) -> Annotated[_ffi.CData, "Set *"]:
+    values_converted = [_ffi.cast("DateADT", x) for x in values]
     result = _lib.dateset_make(values_converted, len(values))
     _check_error()
     return result if result != _ffi.NULL else None
@@ -1175,8 +1178,8 @@ def datespan_make(lower: int, upper: int, lower_inc: bool, upper_inc: bool) -> A
     return result if result != _ffi.NULL else None
 
 
-def floatset_make(values: "list[const double]") -> Annotated[_ffi.CData, "Set *"]:
-    values_converted = _ffi.new("const double []", values)
+def floatset_make(values: list[float]) -> Annotated[_ffi.CData, "Set *"]:
+    values_converted = values
     result = _lib.floatset_make(values_converted, len(values))
     _check_error()
     return result if result != _ffi.NULL else None
@@ -1188,8 +1191,8 @@ def floatspan_make(lower: float, upper: float, lower_inc: bool, upper_inc: bool)
     return result if result != _ffi.NULL else None
 
 
-def intset_make(values: "list[const int]") -> Annotated[_ffi.CData, "Set *"]:
-    values_converted = _ffi.new("const int []", values)
+def intset_make(values: list[int]) -> Annotated[_ffi.CData, "Set *"]:
+    values_converted = values
     result = _lib.intset_make(values_converted, len(values))
     _check_error()
     return result if result != _ffi.NULL else None
@@ -1222,8 +1225,8 @@ def spanset_copy(ss: Annotated[_ffi.CData, "const SpanSet *"]) -> Annotated[_ffi
     return result if result != _ffi.NULL else None
 
 
-def spanset_make(spans: list[Annotated[_ffi.CData, "Span *"]]) -> Annotated[_ffi.CData, "SpanSet *"]:
-    spans_converted = _ffi.new("Span []", spans)
+def spanset_make(spans: list[Annotated[_ffi.CData, "Span"]]) -> Annotated[_ffi.CData, "SpanSet *"]:
+    spans_converted = spans
     result = _lib.spanset_make(spans_converted, len(spans))
     _check_error()
     return result if result != _ffi.NULL else None
@@ -1237,7 +1240,7 @@ def textset_make(values: list[str]) -> Annotated[_ffi.CData, "Set *"]:
 
 
 def tstzset_make(values: list[int]) -> Annotated[_ffi.CData, "Set *"]:
-    values_converted = [_ffi.cast("const TimestampTz", x) for x in values]
+    values_converted = [_ffi.cast("TimestampTz", x) for x in values]
     result = _lib.tstzset_make(values_converted, len(values))
     _check_error()
     return result if result != _ffi.NULL else None
@@ -5960,9 +5963,10 @@ def tbox_from_hexwkb(hexwkb: str) -> Annotated[_ffi.CData, "TBox *"]:
     return result if result != _ffi.NULL else None
 
 
-def tbox_from_wkb(wkb: bytes) -> "TBOX *":
+def tbox_from_wkb(wkb: bytes) -> Annotated[_ffi.CData, "TBox *"]:
     wkb_converted = _ffi.new("uint8_t []", wkb)
     result = _lib.tbox_from_wkb(wkb_converted, len(wkb))
+    _check_error()
     return result if result != _ffi.NULL else None
 
 
@@ -6602,9 +6606,10 @@ def temporal_from_hexwkb(hexwkb: str) -> Annotated[_ffi.CData, "Temporal *"]:
     return result if result != _ffi.NULL else None
 
 
-def temporal_from_wkb(wkb: bytes) -> "Temporal *":
+def temporal_from_wkb(wkb: bytes) -> Annotated[_ffi.CData, "Temporal *"]:
     wkb_converted = _ffi.new("uint8_t []", wkb)
     result = _lib.temporal_from_wkb(wkb_converted, len(wkb))
+    _check_error()
     return result if result != _ffi.NULL else None
 
 
@@ -6807,30 +6812,29 @@ def tintseqset_from_base_tstzspanset(
 
 
 def tsequence_make(
-    instants: Annotated[list, "TInstant **"],
-    count: int,
+    instants: list[Annotated[_ffi.CData, "TInstant *"]],
     lower_inc: bool,
     upper_inc: bool,
     interp: InterpolationType,
     normalize: bool,
 ) -> Annotated[_ffi.CData, "TSequence *"]:
     instants_converted = [_ffi.cast("TInstant *", x) for x in instants]
-    result = _lib.tsequence_make(instants_converted, count, lower_inc, upper_inc, interp, normalize)
+    result = _lib.tsequence_make(instants_converted, len(instants), lower_inc, upper_inc, interp, normalize)
     _check_error()
     return result if result != _ffi.NULL else None
 
 
 def tsequenceset_make(
-    sequences: Annotated[list, "TSequence **"], count: int, normalize: bool
+    sequences: list[Annotated[_ffi.CData, "TSequence *"]], normalize: bool
 ) -> Annotated[_ffi.CData, "TSequenceSet *"]:
     sequences_converted = [_ffi.cast("TSequence *", x) for x in sequences]
-    result = _lib.tsequenceset_make(sequences_converted, count, normalize)
+    result = _lib.tsequenceset_make(sequences_converted, len(sequences), normalize)
     _check_error()
     return result if result != _ffi.NULL else None
 
 
 def tsequenceset_make_gaps(
-    instants: Annotated[list, "TInstant **"],
+    instants: list[Annotated[_ffi.CData, "TInstant *"]],
     interp: InterpolationType,
     maxt: Annotated[_ffi.CData, "const Interval *"],
     maxdist: float,
@@ -7428,9 +7432,9 @@ def float_degrees(value: float, normalize: bool) -> Annotated[float, "double"]:
     return result if result != _ffi.NULL else None
 
 
-def temparr_round(temp: Annotated[list, "Temporal **"], count: int, maxdd: int) -> Annotated[_ffi.CData, "Temporal **"]:
+def temparr_round(temp: list[Annotated[_ffi.CData, "Temporal *"]], maxdd: int) -> Annotated[_ffi.CData, "Temporal **"]:
     temp_converted = [_ffi.cast("Temporal *", x) for x in temp]
-    result = _lib.temparr_round(temp_converted, count, maxdd)
+    result = _lib.temparr_round(temp_converted, len(temp), maxdd)
     _check_error()
     return result if result != _ffi.NULL else None
 
@@ -7679,9 +7683,9 @@ def temporal_merge(
     return result if result != _ffi.NULL else None
 
 
-def temporal_merge_array(temparr: Annotated[list, "Temporal **"], count: int) -> Annotated[_ffi.CData, "Temporal *"]:
+def temporal_merge_array(temparr: list[Annotated[_ffi.CData, "Temporal *"]]) -> Annotated[_ffi.CData, "Temporal *"]:
     temparr_converted = [_ffi.cast("Temporal *", x) for x in temparr]
-    result = _lib.temporal_merge_array(temparr_converted, count)
+    result = _lib.temporal_merge_array(temparr_converted, len(temparr))
     _check_error()
     return result if result != _ffi.NULL else None
 
@@ -11679,13 +11683,10 @@ def geo_as_text(gs: Annotated[_ffi.CData, "const GSERIALIZED *"], precision: int
     return result if result != _ffi.NULL else None
 
 
-def geo_from_ewkb(
-    wkb: Annotated[_ffi.CData, "const uint8_t *"], wkb_size: Annotated[_ffi.CData, "size_t"], srid: int
-) -> Annotated[_ffi.CData, "GSERIALIZED *"]:
-    wkb_converted = _ffi.cast("const uint8_t *", wkb)
-    wkb_size_converted = _ffi.cast("size_t", wkb_size)
+def geo_from_ewkb(wkb: bytes, srid: int) -> Annotated[_ffi.CData, "GSERIALIZED *"]:
+    wkb_converted = _ffi.new("uint8_t []", wkb)
     srid_converted = _ffi.cast("int32", srid)
-    result = _lib.geo_from_ewkb(wkb_converted, wkb_size_converted, srid_converted)
+    result = _lib.geo_from_ewkb(wkb_converted, len(wkb), srid_converted)
     _check_error()
     return result if result != _ffi.NULL else None
 
@@ -11987,16 +11988,16 @@ def geo_transform_pipeline(
     return result if result != _ffi.NULL else None
 
 
-def geo_collect_garray(gsarr: Annotated[list, "GSERIALIZED **"], count: int) -> Annotated[_ffi.CData, "GSERIALIZED *"]:
+def geo_collect_garray(gsarr: list[Annotated[_ffi.CData, "GSERIALIZED *"]]) -> Annotated[_ffi.CData, "GSERIALIZED *"]:
     gsarr_converted = [_ffi.cast("GSERIALIZED *", x) for x in gsarr]
-    result = _lib.geo_collect_garray(gsarr_converted, count)
+    result = _lib.geo_collect_garray(gsarr_converted, len(gsarr))
     _check_error()
     return result if result != _ffi.NULL else None
 
 
-def geo_makeline_garray(gsarr: Annotated[list, "GSERIALIZED **"], count: int) -> Annotated[_ffi.CData, "GSERIALIZED *"]:
+def geo_makeline_garray(gsarr: list[Annotated[_ffi.CData, "GSERIALIZED *"]]) -> Annotated[_ffi.CData, "GSERIALIZED *"]:
     gsarr_converted = [_ffi.cast("GSERIALIZED *", x) for x in gsarr]
-    result = _lib.geo_makeline_garray(gsarr_converted, count)
+    result = _lib.geo_makeline_garray(gsarr_converted, len(gsarr))
     _check_error()
     return result if result != _ffi.NULL else None
 
@@ -12039,9 +12040,9 @@ def geo_points(gs: Annotated[_ffi.CData, "const GSERIALIZED *"]) -> Annotated[_f
     return result if result != _ffi.NULL else None
 
 
-def geom_array_union(gsarr: Annotated[list, "GSERIALIZED **"], count: int) -> Annotated[_ffi.CData, "GSERIALIZED *"]:
+def geom_array_union(gsarr: list[Annotated[_ffi.CData, "GSERIALIZED *"]]) -> Annotated[_ffi.CData, "GSERIALIZED *"]:
     gsarr_converted = [_ffi.cast("GSERIALIZED *", x) for x in gsarr]
-    result = _lib.geom_array_union(gsarr_converted, count)
+    result = _lib.geom_array_union(gsarr_converted, len(gsarr))
     _check_error()
     return result if result != _ffi.NULL else None
 
@@ -12404,7 +12405,7 @@ def spatialset_as_ewkt(set: Annotated[_ffi.CData, "const Set *"], maxdd: int) ->
     return result if result != _ffi.NULL else None
 
 
-def geoset_make(values: Annotated[list, "GSERIALIZED **"]) -> Annotated[_ffi.CData, "Set *"]:
+def geoset_make(values: list[Annotated[_ffi.CData, "GSERIALIZED *"]]) -> Annotated[_ffi.CData, "Set *"]:
     values_converted = [_ffi.cast("GSERIALIZED *", x) for x in values]
     result = _lib.geoset_make(values_converted, len(values))
     _check_error()
@@ -12608,9 +12609,10 @@ def stbox_from_hexwkb(hexwkb: str) -> Annotated[_ffi.CData, "STBox *"]:
     return result if result != _ffi.NULL else None
 
 
-def stbox_from_wkb(wkb: bytes) -> "STBOX *":
+def stbox_from_wkb(wkb: bytes) -> Annotated[_ffi.CData, "STBox *"]:
     wkb_converted = _ffi.new("uint8_t []", wkb)
     result = _lib.stbox_from_wkb(wkb_converted, len(wkb))
+    _check_error()
     return result if result != _ffi.NULL else None
 
 
@@ -12966,11 +12968,9 @@ def stbox_shift_scale_time(
     return result if result != _ffi.NULL else None
 
 
-def stboxarr_round(
-    boxarr: Annotated[_ffi.CData, "const STBox *"], count: int, maxdd: int
-) -> Annotated[_ffi.CData, "STBox *"]:
-    boxarr_converted = _ffi.cast("const STBox *", boxarr)
-    result = _lib.stboxarr_round(boxarr_converted, count, maxdd)
+def stboxarr_round(boxarr: list[Annotated[_ffi.CData, "STBox"]], maxdd: int) -> Annotated[_ffi.CData, "STBox *"]:
+    boxarr_converted = boxarr
+    result = _lib.stboxarr_round(boxarr_converted, len(boxarr), maxdd)
     _check_error()
     return result if result != _ffi.NULL else None
 
@@ -13489,11 +13489,10 @@ def tpointseq_from_base_tstzspan(
 
 
 def tpointseq_make_coords(
-    xcoords: Annotated[_ffi.CData, "const double *"],
-    ycoords: Annotated[_ffi.CData, "const double *"],
-    zcoords: Annotated[_ffi.CData, "const double *"],
-    times: int,
-    count: int,
+    xcoords: list[float],
+    ycoords: list[float],
+    zcoords: list[float],
+    times: list[int],
     srid: int,
     geodetic: bool,
     lower_inc: bool,
@@ -13501,17 +13500,23 @@ def tpointseq_make_coords(
     interp: InterpolationType,
     normalize: bool,
 ) -> Annotated[_ffi.CData, "TSequence *"]:
-    xcoords_converted = _ffi.cast("const double *", xcoords)
-    ycoords_converted = _ffi.cast("const double *", ycoords)
-    zcoords_converted = _ffi.cast("const double *", zcoords)
-    times_converted = _ffi.cast("const TimestampTz *", times)
+    xcoords_converted = xcoords
+    if len(ycoords) != len(xcoords):
+        raise ValueError("ycoords and xcoords must have the same length")
+    ycoords_converted = ycoords
+    if len(zcoords) != len(xcoords):
+        raise ValueError("zcoords and xcoords must have the same length")
+    zcoords_converted = zcoords
+    if len(times) != len(xcoords):
+        raise ValueError("times and xcoords must have the same length")
+    times_converted = [_ffi.cast("TimestampTz", x) for x in times]
     srid_converted = _ffi.cast("int32", srid)
     result = _lib.tpointseq_make_coords(
         xcoords_converted,
         ycoords_converted,
         zcoords_converted,
         times_converted,
-        count,
+        len(xcoords),
         srid_converted,
         geodetic,
         lower_inc,
@@ -15704,50 +15709,41 @@ def tgeo_space_time_split(
 
 
 def geo_cluster_kmeans(
-    geoms: Annotated[list, "const GSERIALIZED **"],
-    ngeoms: Annotated[_ffi.CData, "uint32_t"],
-    k: Annotated[_ffi.CData, "uint32_t"],
+    geoms: list[Annotated[_ffi.CData, "GSERIALIZED *"]], k: Annotated[_ffi.CData, "uint32_t"]
 ) -> Annotated[_ffi.CData, "int *"]:
-    geoms_converted = [_ffi.cast("const GSERIALIZED *", x) for x in geoms]
-    ngeoms_converted = _ffi.cast("uint32_t", ngeoms)
+    geoms_converted = [_ffi.cast("GSERIALIZED *", x) for x in geoms]
     k_converted = _ffi.cast("uint32_t", k)
-    result = _lib.geo_cluster_kmeans(geoms_converted, ngeoms_converted, k_converted)
+    result = _lib.geo_cluster_kmeans(geoms_converted, len(geoms), k_converted)
     _check_error()
     return result if result != _ffi.NULL else None
 
 
 def geo_cluster_dbscan(
-    geoms: Annotated[list, "const GSERIALIZED **"],
-    ngeoms: Annotated[_ffi.CData, "uint32_t"],
-    tolerance: float,
-    minpoints: int,
+    geoms: list[Annotated[_ffi.CData, "GSERIALIZED *"]], tolerance: float, minpoints: int
 ) -> tuple[Annotated[_ffi.CData, "uint32_t *"], Annotated[_ffi.CData, "int"]]:
-    geoms_converted = [_ffi.cast("const GSERIALIZED *", x) for x in geoms]
-    ngeoms_converted = _ffi.cast("uint32_t", ngeoms)
+    geoms_converted = [_ffi.cast("GSERIALIZED *", x) for x in geoms]
     count = _ffi.new("int *")
-    result = _lib.geo_cluster_dbscan(geoms_converted, ngeoms_converted, tolerance, minpoints, count)
+    result = _lib.geo_cluster_dbscan(geoms_converted, len(geoms), tolerance, minpoints, count)
     _check_error()
     return result if result != _ffi.NULL else None, count[0]
 
 
 def geo_cluster_intersecting(
-    geoms: Annotated[list, "const GSERIALIZED **"], ngeoms: Annotated[_ffi.CData, "uint32_t"]
+    geoms: list[Annotated[_ffi.CData, "GSERIALIZED *"]],
 ) -> tuple[Annotated[_ffi.CData, "GSERIALIZED **"], Annotated[_ffi.CData, "int"]]:
-    geoms_converted = [_ffi.cast("const GSERIALIZED *", x) for x in geoms]
-    ngeoms_converted = _ffi.cast("uint32_t", ngeoms)
+    geoms_converted = [_ffi.cast("GSERIALIZED *", x) for x in geoms]
     count = _ffi.new("int *")
-    result = _lib.geo_cluster_intersecting(geoms_converted, ngeoms_converted, count)
+    result = _lib.geo_cluster_intersecting(geoms_converted, len(geoms), count)
     _check_error()
     return result if result != _ffi.NULL else None, count[0]
 
 
 def geo_cluster_within(
-    geoms: Annotated[list, "const GSERIALIZED **"], ngeoms: Annotated[_ffi.CData, "uint32_t"], tolerance: float
+    geoms: list[Annotated[_ffi.CData, "GSERIALIZED *"]], tolerance: float
 ) -> tuple[Annotated[_ffi.CData, "GSERIALIZED **"], Annotated[_ffi.CData, "int"]]:
-    geoms_converted = [_ffi.cast("const GSERIALIZED *", x) for x in geoms]
-    ngeoms_converted = _ffi.cast("uint32_t", ngeoms)
+    geoms_converted = [_ffi.cast("GSERIALIZED *", x) for x in geoms]
     count = _ffi.new("int *")
-    result = _lib.geo_cluster_within(geoms_converted, ngeoms_converted, tolerance, count)
+    result = _lib.geo_cluster_within(geoms_converted, len(geoms), tolerance, count)
     _check_error()
     return result if result != _ffi.NULL else None, count[0]
 
@@ -20430,12 +20426,9 @@ def npoint_from_hexwkb(hexwkb: str) -> Annotated[_ffi.CData, "Npoint *"]:
     return result if result != _ffi.NULL else None
 
 
-def npoint_from_wkb(
-    wkb: Annotated[_ffi.CData, "const uint8_t *"], size: Annotated[_ffi.CData, "size_t"]
-) -> Annotated[_ffi.CData, "Npoint *"]:
-    wkb_converted = _ffi.cast("const uint8_t *", wkb)
-    size_converted = _ffi.cast("size_t", size)
-    result = _lib.npoint_from_wkb(wkb_converted, size_converted)
+def npoint_from_wkb(wkb: bytes) -> Annotated[_ffi.CData, "Npoint *"]:
+    wkb_converted = _ffi.new("uint8_t []", wkb)
+    result = _lib.npoint_from_wkb(wkb_converted, len(wkb))
     _check_error()
     return result if result != _ffi.NULL else None
 
@@ -20827,9 +20820,9 @@ def npointset_out(s: Annotated[_ffi.CData, "const Set *"], maxdd: int) -> Annota
     return result if result != _ffi.NULL else None
 
 
-def npointset_make(values: Annotated[list, "Npoint **"], count: int) -> Annotated[_ffi.CData, "Set *"]:
+def npointset_make(values: list[Annotated[_ffi.CData, "Npoint *"]]) -> Annotated[_ffi.CData, "Set *"]:
     values_converted = [_ffi.cast("Npoint *", x) for x in values]
-    result = _lib.npointset_make(values_converted, count)
+    result = _lib.npointset_make(values_converted, len(values))
     _check_error()
     return result if result != _ffi.NULL else None
 
